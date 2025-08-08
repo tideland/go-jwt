@@ -17,7 +17,7 @@ import (
 	"testing"
 	"time"
 
-	"tideland.dev/go/audit/asserts"
+	"tideland.dev/go/asserts/verify"
 
 	"tideland.dev/go/jwt"
 )
@@ -29,54 +29,48 @@ import (
 // TestCachePutGet verifies the putting and getting of tokens
 // to the cache.
 func TestCachePutGet(t *testing.T) {
-	assert := asserts.NewTesting(t, asserts.FailStop)
-	assert.Logf("testing cache put and get")
 	ctx := context.Background()
 	cache := jwt.NewCache(ctx, time.Minute, time.Minute, time.Minute, 10)
 	key := []byte("secret")
 	claims := initClaims()
 	jwtIn, err := jwt.Encode(claims, key, jwt.HS512)
-	assert.Nil(err)
+	verify.NoError(t, err)
 	_, err = cache.Put(jwtIn)
-	assert.NoError(err)
+	verify.NoError(t, err)
 	jwt := jwtIn.String()
 	jwtOut, err := cache.Get(jwt)
-	assert.NoError(err)
-	assert.Equal(jwtIn, jwtOut)
+	verify.NoError(t, err)
+	verify.Equal(t, jwtIn, jwtOut)
 	jwtOut, err = cache.Get("is.not.there")
-	assert.NoError(err)
-	assert.Nil(jwtOut)
+	verify.NoError(t, err)
+	verify.Nil(t, jwtOut)
 }
 
 // TestCacheAccessCleanup verifies the access based cleanup
 // of the JWT cache.
 func TestCacheAccessCleanup(t *testing.T) {
-	assert := asserts.NewTesting(t, asserts.FailStop)
-	assert.Logf("testing cache access based cleanup")
 	ctx := context.Background()
 	cache := jwt.NewCache(ctx, time.Second, time.Second, time.Second, 10)
 	key := []byte("secret")
 	claims := initClaims()
 	jwtIn, err := jwt.Encode(claims, key, jwt.HS512)
-	assert.NoError(err)
+	verify.NoError(t, err)
 	_, err = cache.Put(jwtIn)
-	assert.NoError(err)
+	verify.NoError(t, err)
 	jwt := jwtIn.String()
 	jwtOut, err := cache.Get(jwt)
-	assert.NoError(err)
-	assert.Equal(jwtIn, jwtOut)
+	verify.NoError(t, err)
+	verify.Equal(t, jwtIn, jwtOut)
 	// Now wait a bit an try again.
 	time.Sleep(5 * time.Second)
 	jwtOut, err = cache.Get(jwt)
-	assert.NoError(err)
-	assert.Nil(jwtOut)
+	verify.NoError(t, err)
+	verify.Nil(t, jwtOut)
 }
 
 // TestCacheValidityCleanup verifies the validity based cleanup
 // of the JWT cache.
 func TestCacheValidityCleanup(t *testing.T) {
-	assert := asserts.NewTesting(t, asserts.FailStop)
-	assert.Logf("testing cache validity based cleanup")
 	ctx := context.Background()
 	cache := jwt.NewCache(ctx, time.Minute, time.Second, time.Second, 10)
 	key := []byte("secret")
@@ -87,32 +81,30 @@ func TestCacheValidityCleanup(t *testing.T) {
 	claims.SetNotBefore(nbf)
 	claims.SetExpiration(exp)
 	jwtIn, err := jwt.Encode(claims, key, jwt.HS512)
-	assert.Nil(err)
+	verify.NoError(t, err)
 	_, err = cache.Put(jwtIn)
-	assert.NoError(err)
+	verify.NoError(t, err)
 	jwt := jwtIn.String()
 	jwtOut, err := cache.Get(jwt)
-	assert.NoError(err)
-	assert.Equal(jwtOut, jwtIn)
+	verify.NoError(t, err)
+	verify.Equal(t, jwtOut, jwtIn)
 	// Now access until it is invalid and not
 	// available anymore.
 	var i int
 	for i = 0; i < 5; i++ {
 		time.Sleep(time.Second)
 		jwtOut, err = cache.Get(jwt)
-		assert.NoError(err)
+		verify.NoError(t, err)
 		if jwtOut == nil {
 			break
 		}
-		assert.Equal(jwtOut, jwtIn)
+		verify.Equal(t, jwtOut, jwtIn)
 	}
-	assert.True(i > 1 && i < 4)
+	verify.True(t, i > 1 && i < 4)
 }
 
 // TestCacheLoad verifies the cache load based cleanup.
 func TestCacheLoad(t *testing.T) {
-	assert := asserts.NewTesting(t, asserts.FailStop)
-	assert.Logf("testing cache load based cleanup")
 	cacheTime := 100 * time.Millisecond
 	ctx := context.Background()
 	cache := jwt.NewCache(ctx, 2*cacheTime, cacheTime, cacheTime, 4)
@@ -124,32 +116,30 @@ func TestCacheLoad(t *testing.T) {
 		time.Sleep(50 * time.Millisecond)
 		key := []byte(fmt.Sprintf("secret-%d", i))
 		jwtIn, err := jwt.Encode(claims, key, jwt.HS512)
-		assert.Nil(err)
+		verify.NoError(t, err)
 		size, err := cache.Put(jwtIn)
-		assert.NoError(err)
-		assert.True(size < 6)
+		verify.NoError(t, err)
+		verify.True(t, size < 6)
 	}
 }
 
 // TestCacheContext verifies the cache stopping by context.
 func TestCacheContext(t *testing.T) {
-	assert := asserts.NewTesting(t, asserts.FailStop)
-	assert.Logf("testing cache stopping by context")
 	ctx, cancel := context.WithCancel(context.Background())
 	cache := jwt.NewCache(ctx, time.Minute, time.Minute, time.Minute, 10)
 	key := []byte("secret")
 	claims := initClaims()
 	jwtIn, err := jwt.Encode(claims, key, jwt.HS512)
-	assert.NoError(err)
+	verify.NoError(t, err)
 	_, err = cache.Put(jwtIn)
-	assert.NoError(err)
+	verify.NoError(t, err)
 	// Now cancel and test to get jwt.
 	cancel()
 	time.Sleep(10 * time.Millisecond)
 	jwt := jwtIn.String()
 	jwtOut, err := cache.Get(jwt)
-	assert.ErrorContains(err, "cache action timeout")
-	assert.Nil(jwtOut)
+	verify.ErrorContains(t, err, "cache action timeout")
+	verify.Nil(t, jwtOut)
 }
 
 //--------------------

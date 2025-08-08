@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"tideland.dev/go/audit/asserts"
+	"tideland.dev/go/asserts/verify"
 
 	"tideland.dev/go/jwt"
 )
@@ -40,78 +40,75 @@ const (
 
 // TestDecode verifies a token decoding without internal verification the signature.
 func TestDecode(t *testing.T) {
-	assert := asserts.NewTesting(t, asserts.FailStop)
 	// Decode.
 	token, err := jwt.Decode(rawToken)
-	assert.Nil(err)
-	assert.Equal(token.Algorithm(), jwt.HS512)
+	verify.NoError(t, err)
+	verify.Equal(t, token.Algorithm(), jwt.HS512)
 	key, err := token.Key()
-	assert.Nil(key)
-	assert.ErrorMatch(err, ".*no key available, only after encoding or verifying.*")
-	assert.Length(token.Claims(), 4)
+	verify.Nil(t, key)
+	verify.ErrorMatches(t, err, ".*no key available, only after encoding or verifying.*")
+	verify.Length(t, token.Claims(), 4)
 
 	sub, ok := token.Claims().GetString("sub")
-	assert.True(ok)
-	assert.Equal(sub, subClaim)
+	verify.True(t, ok)
+	verify.Equal(t, sub, subClaim)
 	name, ok := token.Claims().GetString("name")
-	assert.True(ok)
-	assert.Equal(name, nameClaim)
+	verify.True(t, ok)
+	verify.Equal(t, name, nameClaim)
 	admin, ok := token.Claims().GetBool("admin")
-	assert.True(ok)
-	assert.Equal(admin, adminClaim)
+	verify.True(t, ok)
+	verify.Equal(t, admin, adminClaim)
 	iat, ok := token.Claims().IssuedAt()
-	assert.True(ok)
-	assert.Equal(iat, time.Unix(iatClaim, 0))
+	verify.True(t, ok)
+	verify.Equal(t, iat, time.Unix(iatClaim, 0))
 	exp, ok := token.Claims().Expiration()
-	assert.False(ok)
-	assert.Equal(exp, time.Time{})
+	verify.False(t, ok)
+	verify.Equal(t, exp, time.Time{})
 }
 
 // TestIsValid verifies the time validation of a token.
 func TestIsValid(t *testing.T) {
-	assert := asserts.NewTesting(t, asserts.FailStop)
-	assert.Logf("testing time validation")
 	now := time.Now()
 	leeway := time.Minute
 	key := []byte("secret")
 	// Create token with no times set, encode, decode, validate ok.
 	claims := jwt.NewClaims()
 	tokenEnc, err := jwt.Encode(claims, key, jwt.HS512)
-	assert.Nil(err)
+	verify.NoError(t, err)
 	tokenDec, err := jwt.Decode(tokenEnc.String())
-	assert.Nil(err)
+	verify.NoError(t, err)
 	ok := tokenDec.IsValid(leeway)
-	assert.True(ok)
+	verify.True(t, ok)
 	// Now a token with a long timespan, still valid.
 	claims = jwt.NewClaims()
 	claims.SetNotBefore(now.Add(-time.Hour))
 	claims.SetExpiration(now.Add(time.Hour))
 	tokenEnc, err = jwt.Encode(claims, key, jwt.HS512)
-	assert.Nil(err)
+	verify.NoError(t, err)
 	tokenDec, err = jwt.Decode(tokenEnc.String())
-	assert.Nil(err)
+	verify.NoError(t, err)
 	ok = tokenDec.IsValid(leeway)
-	assert.True(ok)
+	verify.True(t, ok)
 	// Now a token with a long timespan in the past, not valid.
 	claims = jwt.NewClaims()
 	claims.SetNotBefore(now.Add(-2 * time.Hour))
 	claims.SetExpiration(now.Add(-time.Hour))
 	tokenEnc, err = jwt.Encode(claims, key, jwt.HS512)
-	assert.Nil(err)
+	verify.NoError(t, err)
 	tokenDec, err = jwt.Decode(tokenEnc.String())
-	assert.Nil(err)
+	verify.NoError(t, err)
 	ok = tokenDec.IsValid(leeway)
-	assert.False(ok)
+	verify.False(t, ok)
 	// And at last a token with a long timespan in the future, not valid.
 	claims = jwt.NewClaims()
 	claims.SetNotBefore(now.Add(time.Hour))
 	claims.SetExpiration(now.Add(2 * time.Hour))
 	tokenEnc, err = jwt.Encode(claims, key, jwt.HS512)
-	assert.Nil(err)
+	verify.NoError(t, err)
 	tokenDec, err = jwt.Decode(tokenEnc.String())
-	assert.Nil(err)
+	verify.NoError(t, err)
 	ok = tokenDec.IsValid(leeway)
-	assert.False(ok)
+	verify.False(t, ok)
 }
 
 // EOF
