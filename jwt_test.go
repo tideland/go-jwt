@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token - Unit Tests
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt_test // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"testing"
@@ -20,9 +17,6 @@ import (
 	"tideland.dev/go/jwt"
 )
 
-//--------------------
-// CONSTANTS
-//--------------------
 
 const (
 	subClaim   = "1234567890"
@@ -34,9 +28,6 @@ const (
 		"P50peTbENKIPw0tjuHLgosFmJRYGTh_kNA9IcyWIoJ39uYMa4JfKYhnQw5mkgSLB2WYVT68QaDeWWErn4lU69g"
 )
 
-//--------------------
-// TESTS
-//--------------------
 
 // TestDecode verifies a token decoding without internal verification the signature.
 func TestDecode(t *testing.T) {
@@ -111,4 +102,3 @@ func TestIsValid(t *testing.T) {
 	verify.False(t, ok)
 }
 
-// EOF

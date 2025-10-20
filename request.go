@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"fmt"
@@ -17,9 +14,6 @@ import (
 	"strings"
 )
 
-//--------------------
-// REQUEST HELPERS
-//--------------------
 
 // RequestAdd adds a token as header to a request for
 // usage by a client.
@@ -39,9 +33,6 @@ func RequestVerify(req *http.Request, key Key) (*JWT, error) {
 	return decode(req, key)
 }
 
-//--------------------
-// PRIVATE HELPERS
-//--------------------
 
 // decodeFromRequest is the generic decoder with possible
 // caching and verification.
@@ -69,4 +60,3 @@ func decode(req *http.Request, key Key) (*JWT, error) {
 	return jwt, nil
 }
 
-// EOF

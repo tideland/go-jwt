@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"encoding/base64"
@@ -19,9 +16,6 @@ import (
 	"time"
 )
 
-//--------------------
-// JSON WEB TOKEN
-//--------------------
 
 // jwtHeader contains the JWT header fields.
 type jwtHeader struct {
@@ -29,7 +23,6 @@ type jwtHeader struct {
 	Type      string `json:"typ"`
 }
 
-// JWT manages the parts of a JSON Web Token and the access to those.
 type JWT struct {
 	claims    Claims
 	key       Key
@@ -142,9 +135,6 @@ func (jwt *JWT) String() string {
 	return jwt.token
 }
 
-//--------------------
-// HELPERS
-//--------------------
 
 // marshallAndEncode marshals the passed value to JSON and
 // creates a BASE64 string out of it.
@@ -195,4 +185,3 @@ func decodeAndVerify(parts []string, key Key, algorithm Algorithm) error {
 	return algorithm.Verify(data, sig, key)
 }
 
-// EOF

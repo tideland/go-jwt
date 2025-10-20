@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"crypto"
@@ -26,17 +23,11 @@ import (
 	_ "crypto/sha512"
 )
 
-//--------------------
-// SIGNATURE
-//--------------------
 
 // Signature is the resulting signature when signing
 // a token.
 type Signature []byte
 
-//--------------------
-// ALGORITHM
-//--------------------
 
 // Algorithm describes the algorithm used to sign a token.
 type Algorithm string
@@ -263,9 +254,6 @@ func (a Algorithm) verifyRSA(data []byte, sig Signature, key *rsa.PublicKey, h c
 	return nil
 }
 
-//--------------------
-// HELPERS
-//--------------------
 
 // hashSum determines the hash sum of the passed data.
 func hashSum(data []byte, h crypto.Hash) []byte {
@@ -276,4 +264,3 @@ func hashSum(data []byte, h crypto.Hash) []byte {
 	return hasher.Sum(nil)
 }
 
-// EOF

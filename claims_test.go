@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token - Unit Tests
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt_test // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"encoding/json"
@@ -22,9 +19,6 @@ import (
 	"tideland.dev/go/jwt"
 )
 
-//--------------------
-// TESTS
-//--------------------
 
 // TestClaimsMarshalling verifies the marshalling of claims to JSON and back.
 func TestClaimsMarshalling(t *testing.T) {
@@ -408,4 +402,3 @@ func TestClaimsValidity(t *testing.T) {
 	verify.False(t, valid)
 }
 
-// EOF

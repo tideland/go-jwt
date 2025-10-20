@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token - Cache - Unit Tests
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt_test // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"context"
@@ -22,9 +19,6 @@ import (
 	"tideland.dev/go/jwt"
 )
 
-//--------------------
-// TESTS
-//--------------------
 
 // TestCachePutGet verifies the putting and getting of tokens
 // to the cache.
@@ -142,9 +136,6 @@ func TestCacheContext(t *testing.T) {
 	verify.True(t, jwtOut == nil)
 }
 
-//--------------------
-// HELPERS
-//--------------------
 
 // initClaims creates test claims.
 func initClaims() jwt.Claims {
@@ -155,4 +146,3 @@ func initClaims() jwt.Claims {
 	return c
 }
 
-// EOF

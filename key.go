@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token - Crypto
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"crypto/ecdsa"
@@ -21,9 +18,6 @@ import (
 	"io/ioutil"
 )
 
-//--------------------
-// KEY
-//--------------------
 
 // Key is the used key to sign a token. The real implementation
 // controls signing and verification.
@@ -127,4 +121,3 @@ func ReadRSAPublicKey(r io.Reader) (Key, error) {
 	return publicKey, nil
 }
 
-// EOF

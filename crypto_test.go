@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token - Unit Tests
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt_test // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"bytes"
@@ -26,9 +23,6 @@ import (
 	"tideland.dev/go/jwt"
 )
 
-//--------------------
-// TESTS
-//--------------------
 
 var (
 	esTests = []jwt.Algorithm{jwt.ES256, jwt.ES384, jwt.ES512}
@@ -154,7 +148,6 @@ func TestNotMatchingAlgorithm(t *testing.T) {
 }
 
 // TestESTools verifies the tools for the reading of PEM encoded
-// ECDSA keys.
 func TestESTools(t *testing.T) {
 	// Generate keys and PEMs.
 	privateKeyIn, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
@@ -189,7 +182,6 @@ func TestESTools(t *testing.T) {
 }
 
 // TestRSTools verifies the tools for the reading of PEM encoded
-// RSA keys.
 func TestRSTools(t *testing.T) {
 	// Generate keys and PEMs.
 	privateKeyIn, err := rsa.GenerateKey(rand.Reader, 2048)
@@ -222,4 +214,3 @@ func TestRSTools(t *testing.T) {
 	verify.NoError(t, err)
 }
 
-// EOF

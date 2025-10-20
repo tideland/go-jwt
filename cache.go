@@ -1,15 +1,12 @@
 // Tideland Go JSON Web Token - Cache
 //
-// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
 package jwt // import "tideland.dev/go/jwt"
 
-//--------------------
-// IMPORTS
-//--------------------
 
 import (
 	"context"
@@ -19,9 +16,6 @@ import (
 	"time"
 )
 
-//--------------------
-// CACHE ENTRY
-//--------------------
 
 // cacheEntry manages a token and its access time.
 type cacheEntry struct {
@@ -29,9 +23,6 @@ type cacheEntry struct {
 	accessed time.Time
 }
 
-//--------------------
-// CACHE
-//--------------------
 
 // defaultTimeout is the default timeout for synchronous actions.
 const defaultTimeout = 5 * time.Second
@@ -236,4 +227,3 @@ func (c *Cache) backend() {
 	}
 }
 
-// EOF
