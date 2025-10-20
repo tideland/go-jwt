@@ -1,6 +1,6 @@
 // Tideland Go JSON Web Token - Unit Tests
 //
-// Copyright (C) 2016-2021 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
@@ -13,6 +13,7 @@ package jwt_test // import "tideland.dev/go/jwt"
 
 import (
 	"encoding/json"
+	"slices"
 	"testing"
 	"time"
 
@@ -240,14 +241,14 @@ func TestClaimsAudience(t *testing.T) {
 	c := jwt.NewClaims()
 	aud, ok := c.Audience()
 	verify.False(t, ok)
-	verify.Nil(t, aud)
+	verify.Length(t, aud, 0)
 	none := c.SetAudience(audience...)
 	verify.Length(t, none, 0)
 	aud, ok = c.Audience()
-	verify.Equal(t, aud, audience)
+	verify.True(t, slices.Equal(aud, audience))
 	verify.True(t, ok)
 	old := c.DeleteAudience()
-	verify.Equal(t, old, aud)
+	verify.True(t, slices.Equal(old, aud))
 	_, ok = c.Audience()
 	verify.False(t, ok)
 }

@@ -1,6 +1,6 @@
 // Tideland Go JSON Web Token - Unit Tests
 //
-// Copyright (C) 2016-2021 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
@@ -142,13 +142,13 @@ func TestNotMatchingAlgorithm(t *testing.T) {
 	for _, test := range tests {
 		for _, key := range test.signKeys {
 			_, err := test.algorithm.Sign(data, key)
-			verify.ErrorMatches(t, err, errorMatch)
+			verify.ErrorMatch(t, err, errorMatch)
 		}
 		signature, err := test.algorithm.Sign(data, test.key)
 		verify.NoError(t, err)
 		for _, key := range test.verifyKeys {
 			err = test.algorithm.Verify(data, signature, key)
-			verify.ErrorMatches(t, err, errorMatch)
+			verify.ErrorMatch(t, err, errorMatch)
 		}
 	}
 }

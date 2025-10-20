@@ -1,6 +1,6 @@
 // Tideland Go JSON Web Token - Cache - Unit Tests
 //
-// Copyright (C) 2016-2021 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
@@ -43,7 +43,7 @@ func TestCachePutGet(t *testing.T) {
 	verify.Equal(t, jwtIn, jwtOut)
 	jwtOut, err = cache.Get("is.not.there")
 	verify.NoError(t, err)
-	verify.Nil(t, jwtOut)
+	verify.True(t, jwtOut == nil)
 }
 
 // TestCacheAccessCleanup verifies the access based cleanup
@@ -65,7 +65,7 @@ func TestCacheAccessCleanup(t *testing.T) {
 	time.Sleep(5 * time.Second)
 	jwtOut, err = cache.Get(jwt)
 	verify.NoError(t, err)
-	verify.Nil(t, jwtOut)
+	verify.True(t, jwtOut == nil)
 }
 
 // TestCacheValidityCleanup verifies the validity based cleanup
@@ -139,7 +139,7 @@ func TestCacheContext(t *testing.T) {
 	jwt := jwtIn.String()
 	jwtOut, err := cache.Get(jwt)
 	verify.ErrorContains(t, err, "cache action timeout")
-	verify.Nil(t, jwtOut)
+	verify.True(t, jwtOut == nil)
 }
 
 //--------------------

@@ -1,6 +1,6 @@
 // Tideland Go JSON Web Token - Unit Tests
 //
-// Copyright (C) 2016-2021 Frank Mueller / Tideland / Oldenburg / Germany
+// Copyright (C) 2016-2025 Frank Mueller / Tideland / Oldenburg / Germany
 //
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
@@ -46,7 +46,7 @@ func TestDecode(t *testing.T) {
 	verify.Equal(t, token.Algorithm(), jwt.HS512)
 	key, err := token.Key()
 	verify.Nil(t, key)
-	verify.ErrorMatches(t, err, ".*no key available, only after encoding or verifying.*")
+	verify.ErrorMatch(t, err, ".*no key available, only after encoding or verifying.*")
 	verify.Length(t, token.Claims(), 4)
 
 	sub, ok := token.Claims().GetString("sub")
