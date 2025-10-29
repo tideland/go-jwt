@@ -7,22 +7,21 @@
 
 package jwt // import "tideland.dev/go/jwt"
 
-
 import (
 	"context"
 	"fmt"
 	"net/http"
 	"strings"
 	"time"
-)
 
+	"github.com/dolthub/swiss"
+)
 
 // cacheEntry manages a token and its access time.
 type cacheEntry struct {
 	token    *JWT
 	accessed time.Time
 }
-
 
 // defaultTimeout is the default timeout for synchronous actions.
 const defaultTimeout = 5 * time.Second
@@ -31,7 +30,7 @@ const defaultTimeout = 5 * time.Second
 // don't have to be decoded or verified multiple times.
 type Cache struct {
 	ctx        context.Context
-	entries    map[string]*cacheEntry
+	entries    *swiss.Map[string, *cacheEntry]
 	ttl        time.Duration
 	leeway     time.Duration
 	interval   time.Duration
@@ -49,7 +48,7 @@ type Cache struct {
 func NewCache(ctx context.Context, ttl, leeway, interval time.Duration, maxEntries int) *Cache {
 	c := &Cache{
 		ctx:        ctx,
-		entries:    map[string]*cacheEntry{},
+		entries:    swiss.NewMap[string, *cacheEntry](42),
 		ttl:        ttl,
 		leeway:     leeway,
 		interval:   interval,
@@ -67,13 +66,13 @@ func (c *Cache) Get(st string) (*JWT, error) {
 		if c.entries == nil {
 			return
 		}
-		entry, ok := c.entries[st]
+		entry, ok := c.entries.Get(st)
 		if !ok {
 			return
 		}
 		if !entry.token.IsValid(c.leeway) {
 			// Remove invalid token.
-			delete(c.entries, st)
+			c.entries.Delete(st)
 		}
 		entry.accessed = time.Now()
 		token = entry.token
@@ -143,14 +142,14 @@ func (c *Cache) Put(token *JWT) (int, error) {
 			return
 		}
 		if token.IsValid(c.leeway) {
-			c.entries[token.String()] = &cacheEntry{token, time.Now()}
-			lenEntries := len(c.entries)
+			c.entries.Put(token.String(), &cacheEntry{token, time.Now()})
+			lenEntries := c.entries.Count()
 			if lenEntries > c.maxEntries {
 				ttl := int64(c.ttl) / int64(lenEntries) * int64(c.maxEntries)
 				c.cleanup(time.Duration(ttl))
 			}
 		}
-		l = len(c.entries)
+		l = c.entries.Count()
 	}, defaultTimeout)
 	return l, err
 }
@@ -180,16 +179,17 @@ func (c *Cache) requestToken(req *http.Request) (string, error) {
 
 // cleanup checks for invalid or unused tokens.
 func (c *Cache) cleanup(ttl time.Duration) {
-	valids := map[string]*cacheEntry{}
+	valids := swiss.NewMap[string, *cacheEntry](42)
 	now := time.Now()
-	for key, entry := range c.entries {
+	c.entries.Iter(func(key string, entry *cacheEntry) bool {
 		if entry.token.IsValid(c.leeway) {
 			if entry.accessed.Add(ttl).After(now) {
 				// Everything fine.
-				valids[key] = entry
+				valids.Put(key, entry)
 			}
 		}
-	}
+		return true
+	})
 	c.entries = valids
 }
 
@@ -214,7 +214,7 @@ func (c *Cache) backend() {
 	for {
 		select {
 		case <-c.ctx.Done():
-			c.entries = map[string]*cacheEntry{}
+			c.entries = swiss.NewMap[string, *cacheEntry](42)
 			ticker.Stop()
 			return
 		case action := <-c.actionc:
@@ -226,4 +226,3 @@ func (c *Cache) backend() {
 		}
 	}
 }
-
