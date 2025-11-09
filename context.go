@@ -5,13 +5,11 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt // import "tideland.dev/go/jwt"
-
+package jwt
 
 import (
 	"context"
 )
-
 
 // key for the storage of values in a context.
 type key int
@@ -30,4 +28,3 @@ func FromContext(ctx context.Context) (*JWT, bool) {
 	token, ok := ctx.Value(jwtKey).(*JWT)
 	return token, ok
 }
-

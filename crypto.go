@@ -5,8 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt // import "tideland.dev/go/jwt"
-
+package jwt
 
 import (
 	"crypto"
@@ -23,11 +22,9 @@ import (
 	_ "crypto/sha512"
 )
 
-
 // Signature is the resulting signature when signing
 // a token.
 type Signature []byte
-
 
 // Algorithm describes the algorithm used to sign a token.
 type Algorithm string
@@ -254,7 +251,6 @@ func (a Algorithm) verifyRSA(data []byte, sig Signature, key *rsa.PublicKey, h c
 	return nil
 }
 
-
 // hashSum determines the hash sum of the passed data.
 func hashSum(data []byte, h crypto.Hash) []byte {
 	hasher := h.New()
@@ -263,4 +259,3 @@ func hashSum(data []byte, h crypto.Hash) []byte {
 	}
 	return hasher.Sum(nil)
 }
-

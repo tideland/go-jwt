@@ -7,5 +7,4 @@
 
 // Package token provides the generation, verification, and analyzing
 // of JSON Web Tokens.
-package jwt // import "tideland.dev/go/jwt"
-
+package jwt

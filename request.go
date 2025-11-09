@@ -5,15 +5,13 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt // import "tideland.dev/go/jwt"
-
+package jwt
 
 import (
 	"fmt"
 	"net/http"
 	"strings"
 )
-
 
 // RequestAdd adds a token as header to a request for
 // usage by a client.
@@ -32,7 +30,6 @@ func RequestDecode(req *http.Request) (*JWT, error) {
 func RequestVerify(req *http.Request, key Key) (*JWT, error) {
 	return decode(req, key)
 }
-
 
 // decodeFromRequest is the generic decoder with possible
 // caching and verification.
@@ -59,4 +56,3 @@ func decode(req *http.Request, key Key) (*JWT, error) {
 	}
 	return jwt, nil
 }
-

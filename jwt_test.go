@@ -5,8 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt_test // import "tideland.dev/go/jwt"
-
+package jwt_test
 
 import (
 	"testing"
@@ -17,7 +16,6 @@ import (
 	"tideland.dev/go/jwt"
 )
 
-
 const (
 	subClaim   = "1234567890"
 	nameClaim  = "John Doe"
@@ -27,7 +25,6 @@ const (
 		"eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTYwMDAwMDAwMH0." +
 		"P50peTbENKIPw0tjuHLgosFmJRYGTh_kNA9IcyWIoJ39uYMa4JfKYhnQw5mkgSLB2WYVT68QaDeWWErn4lU69g"
 )
-
 
 // TestDecode verifies a token decoding without internal verification the signature.
 func TestDecode(t *testing.T) {
@@ -101,4 +98,3 @@ func TestIsValid(t *testing.T) {
 	ok = tokenDec.IsValid(leeway)
 	verify.False(t, ok)
 }
-

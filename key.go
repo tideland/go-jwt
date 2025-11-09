@@ -5,8 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt // import "tideland.dev/go/jwt"
-
+package jwt
 
 import (
 	"crypto/ecdsa"
@@ -17,7 +16,6 @@ import (
 	"io"
 	"io/ioutil"
 )
-
 
 // Key is the used key to sign a token. The real implementation
 // controls signing and verification.
@@ -120,4 +118,3 @@ func ReadRSAPublicKey(r io.Reader) (Key, error) {
 	}
 	return publicKey, nil
 }
-

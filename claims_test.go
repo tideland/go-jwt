@@ -5,8 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt_test // import "tideland.dev/go/jwt"
-
+package jwt_test
 
 import (
 	"encoding/json"
@@ -18,7 +17,6 @@ import (
 
 	"tideland.dev/go/jwt"
 )
-
 
 // TestClaimsMarshalling verifies the marshalling of claims to JSON and back.
 func TestClaimsMarshalling(t *testing.T) {
@@ -401,4 +399,3 @@ func TestClaimsValidity(t *testing.T) {
 	valid = c.IsValid(leeway)
 	verify.False(t, valid)
 }
-

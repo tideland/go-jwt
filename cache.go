@@ -5,7 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt // import "tideland.dev/go/jwt"
+package jwt
 
 import (
 	"context"

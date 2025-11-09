@@ -5,8 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt_test // import "tideland.dev/go/jwt"
-
+package jwt_test
 
 import (
 	"bytes"
@@ -22,7 +21,6 @@ import (
 
 	"tideland.dev/go/jwt"
 )
-
 
 var (
 	esTests = []jwt.Algorithm{jwt.ES256, jwt.ES384, jwt.ES512}
@@ -213,4 +211,3 @@ func TestRSTools(t *testing.T) {
 	err = jwt.RS512.Verify(data, signature, publicKeyOut)
 	verify.NoError(t, err)
 }
-

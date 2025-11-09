@@ -5,8 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt // import "tideland.dev/go/jwt"
-
+package jwt
 
 import (
 	"encoding/base64"
@@ -15,7 +14,6 @@ import (
 	"strings"
 	"time"
 )
-
 
 // jwtHeader contains the JWT header fields.
 type jwtHeader struct {
@@ -135,7 +133,6 @@ func (jwt *JWT) String() string {
 	return jwt.token
 }
 
-
 // marshallAndEncode marshals the passed value to JSON and
 // creates a BASE64 string out of it.
 func marshallAndEncode(value interface{}) (string, error) {
@@ -184,4 +181,3 @@ func decodeAndVerify(parts []string, key Key, algorithm Algorithm) error {
 	}
 	return algorithm.Verify(data, sig, key)
 }
-

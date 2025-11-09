@@ -5,8 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt // import "tideland.dev/go/jwt"
-
+package jwt
 
 import (
 	"encoding/json"
@@ -14,7 +13,6 @@ import (
 	"strconv"
 	"time"
 )
-
 
 // Claims contains the claims of a token payload. The type
 // also provides getters and setters for the reserved claims.
@@ -426,4 +424,3 @@ func (c *Claims) UnmarshalJSON(b []byte) error {
 	*c = Claims(raw)
 	return nil
 }
-

@@ -5,8 +5,7 @@
 // All rights reserved. Use of this source code is governed
 // by the new BSD license.
 
-package jwt_test // import "tideland.dev/go/jwt"
-
+package jwt_test
 
 import (
 	"context"
@@ -18,7 +17,6 @@ import (
 
 	"tideland.dev/go/jwt"
 )
-
 
 // TestCachePutGet verifies the putting and getting of tokens
 // to the cache.
@@ -136,7 +134,6 @@ func TestCacheContext(t *testing.T) {
 	verify.True(t, jwtOut == nil)
 }
 
-
 // initClaims creates test claims.
 func initClaims() jwt.Claims {
 	c := jwt.NewClaims()
@@ -145,4 +142,3 @@ func initClaims() jwt.Claims {
 	c.Set("admin", true)
 	return c
 }
-
